@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Nitro Cold Brew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #000;
+    --white: #fff;
+    --off-white: #f0ece4;
+    --gray: #1a1a1a;
+    --mid-gray: #888;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--white);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: transform 0.15s ease;
+  }
+  .cursor-ring {
+    width: 40px; height: 40px;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    mix-blend-mode: difference;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 40px;
+    mix-blend-mode: difference;
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: 0.15em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 0; height: 1px;
+    background: var(--white);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--white);
+    border: none;
+    padding: 10px 24px;
+    cursor: none;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+  }
+  .nav-cta:hover { background: var(--off-white); transform: scale(1.03); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    place-items: center start;
+    position: relative;
+    overflow: hidden;
+    padding: 120px 40px 60px;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("hero-bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.25;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+
+  .hero-bg-text {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: clamp(120px, 20vw, 320px);
+    color: rgba(255,255,255,0.03);
+    user-select: none;
+    white-space: nowrap;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    letter-spacing: -0.02em;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    text-align: left;
+    max-width: 700px;
+    width: 100%;
+    margin-left: 8%;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 6px 16px;
+    margin-bottom: 40px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .hero-label {
+    display: flex;
+    justify-content: flex-start;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 0;
+  }
+  .hero-label span {
+    font-family: var(--font-display);
+    font-size: clamp(18px, 3vw, 40px);
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(120px, 21vw, 320px);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    position: relative;
+    z-index: 2;
+  }
+  .hero-title .line2 { display: block; }
+
+  .hero-product-img {
+    width: clamp(200px, 22vw, 360px);
+    position: absolute;
+    right: 8%;
+    left: auto;
+    top: 50%;
+    transform: translateY(-42%);
+    z-index: 10;
+    pointer-events: none;
+    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.8));
+  }
+
+  .hero-claims {
+    display: flex;
+    justify-content: flex-start;
+    gap: 40px;
+    margin-top: 0;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .hero-claim {
+    font-family: var(--font-display);
+    font-size: clamp(14px, 2vw, 28px);
+    letter-spacing: 0.1em;
+    color: var(--white);
+  }
+
+  /* SCROLL TICKER */
+  .ticker-wrap {
+    overflow: hidden;
+    background: var(--white);
+    padding: 22px 0;
+    position: relative;
+    z-index: 5;
+  }
+  .ticker {
+    display: flex;
+    white-space: nowrap;
+    will-change: transform;
+  }
+  .ticker-item {
+    font-family: var(--font-display);
+    font-size: 24px;
+    letter-spacing: 0.1em;
+    color: var(--black);
+    padding: 0 40px;
+    flex-shrink: 0;
+  }
+  .ticker-sep {
+    color: rgba(0,0,0,0.3);
+    margin: 0 10px;
+  }
+
+  /* SECTION GENERIC */
+  section {
+    padding: 120px 40px;
+    position: relative;
+  }
+
+  .section-num {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 60px;
+  }
+
+  /* PRODUCT GRID */
+  .products {
+    background: var(--black);
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .products-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 80px;
+  }
+
+  .products-title {
+    font-family: var(--font-display);
+    font-size: clamp(60px, 8vw, 130px);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+  }
+
+  .products-sub {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    max-width: 200px;
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .product-card {
+    z-index: 6;
+    background: var(--gray);
+    padding: 60px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 720px;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transition: background 0.3s ease;
+  }
+  .product-card:hover { background: #111; }
+  .product-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .product-card-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .product-card-img {
+    width: 100%;
+    max-width: 280px;
+    margin: 30px auto;
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    filter: drop-shadow(0 20px 60px rgba(0,0,0,0.6));
+  }
+  .product-card:hover .product-card-img {
+    transform: translateY(-16px) scale(1.04);
+  }
+
+  .product-card-name {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 80px);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+
+  .product-card-desc {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    max-width: 280px;
+  }
+
+  .product-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 6px;
+    transition: border-color 0.2s, gap 0.2s;
+    cursor: none;
+  }
+  .product-card-cta:hover { border-color: var(--white); gap: 20px; }
+  .product-card-cta svg { transition: transform 0.2s; }
+  .product-card-cta:hover svg { transform: translateX(4px); }
+
+  /* STATEMENT SECTION */
+  .statement {
+    background: var(--white);
+    color: var(--black);
+    text-align: center;
+    padding: 140px 40px;
+  }
+  .statement-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.35);
+    margin-bottom: 40px;
+  }
+  .statement-text {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 8vw, 130px);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .statement-text .accent { color: rgba(0,0,0,0.15); }
+
+  /* FEATURES STRIP */
+  .features {
+    background: var(--black);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 0;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .feature-item {
+    padding: 70px 50px;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+  }
+  .feature-item:last-child { border-right: none; }
+  .feature-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.3s;
+  }
+  .feature-item:hover::before { background: rgba(255,255,255,0.03); }
+  .feature-item:hover { outline: 1px solid rgba(255,255,255,0.7); }
+
+  .feature-num {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: 50px;
+  }
+  .feature-name {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 6vw, 90px);
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+    line-height: 1;
+  }
+  .feature-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.7;
+    max-width: 260px;
+  }
+
+  /* COLDTURE SECTION */
+  .coldture {
+    background: var(--black);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+    padding: 120px 40px;
+  }
+
+  .coldture-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .coldture-img-wrap {
+    position: relative;
+  }
+  .coldture-img-wrap img {
+    width: 100%;
+    max-width: 500px;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    filter: drop-shadow(0 30px 80px rgba(0,0,0,0.7));
+  }
+  .coldture-img-wrap:hover img { transform: scale(1.03); }
+  .coldture-tag {
+    position: absolute;
+    top: 20px; left: 20px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 6px 12px;
+  }
+
+  .coldture-content {}
+  .coldture-drop {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 30px;
+  }
+  .coldture-title {
+    font-family: var(--font-display);
+    font-size: clamp(60px, 8vw, 120px);
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+    margin-bottom: 40px;
+  }
+  .coldture-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.8;
+    max-width: 380px;
+    margin-bottom: 50px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--white);
+    color: var(--black);
+    border: none;
+    padding: 16px 36px;
+    cursor: none;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .btn-primary:hover { background: var(--off-white); transform: scale(1.02); }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 16px 36px;
+    cursor: none;
+    transition: border-color 0.2s, transform 0.2s;
+    margin-left: 16px;
+  }
+  .btn-outline:hover { border-color: var(--white); transform: scale(1.02); }
+
+  /* BIG MARQUEE */
+  .marquee-section {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+    padding: 40px 0;
+  }
+  .marquee-track {
+    display: flex;
+    white-space: nowrap;
+    will-change: transform;
+  }
+  .marquee-word {
+    font-family: var(--font-display);
+    font-size: clamp(60px, 9vw, 140px);
+    letter-spacing: -0.01em;
+    padding: 0 40px;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.9);
+    transition: color 0.3s, -webkit-text-stroke 0.3s;
+    cursor: none;
+    flex-shrink: 0;
+  }
+  .marquee-word:hover {
+    color: var(--white);
+    -webkit-text-stroke: 1px transparent;
+  }
+  .marquee-dot {
+    font-family: var(--font-display);
+    font-size: clamp(60px, 9vw, 140px);
+    color: rgba(255,255,255,0.1);
+    padding: 0 20px;
+    flex-shrink: 0;
+  }
+
+  /* CTA FULL */
+  .cta-full {
+    background: var(--white);
+    color: var(--black);
+    padding: 140px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-full::before {
+    content: 'ORDER';
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 30vw;
+    color: rgba(0,0,0,0.04);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(60px, 10vw, 160px);
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    margin-bottom: 50px;
+    position: relative;
+  }
+
+  .btn-black {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    padding: 20px 50px;
+    cursor: none;
+    position: relative;
+    transition: transform 0.2s;
+    text-decoration: none;
+  }
+  .btn-black:hover { transform: scale(1.03); }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 60px 40px 40px;
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 60px;
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 40px;
+    letter-spacing: 0.05em;
+    color: var(--white);
+  }
+  .footer-tagline {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .footer-links a {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-copy {
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.15em;
+  }
+  .footer-social {
+    display: flex;
+    gap: 20px;
+  }
+  .footer-social a {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    text-decoration: none;
+    transition: color 0.2s;
+    cursor: none;
+  }
+  .footer-social a:hover { color: var(--white); }
+
+  /* SCROLL INDICATOR */
+  .scroll-line {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+  .scroll-line::before {
+    content: '';
+    width: 40px; height: 1px;
+    background: rgba(255,255,255,0.2);
+    display: block;
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .product-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .feature-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .coldture-inner { grid-template-columns: 1fr; }
+    .footer-inner { flex-direction: column; gap: 40px; }
+    .products-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .products-sub { text-align: left; }
+    .hero-product-img { width: clamp(140px, 40vw, 240px); }
+  }
+
+  /* ── CAN JOURNEY ─────────────────────────────────────────────── */
+  #can-fixed {
+    position: fixed;
+    width: 500px;
+    height: 560px;
+    pointer-events: none;
+    z-index: 4;          /* below ticker z-index:5 → goes under it */
+    opacity: 0;
+    will-change: transform, left, top;
+  }
+  #can-fixed canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+  }
+  /* Statement section flex for text + can gap */
+  .statement {
+    position: relative;
+  }
+  .statement-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+  .statement-text {
+    transition: none;
+  }
+  #statement-can-gap {
+    flex-shrink: 0;
+    width: 0;
+    height: 1px;
+    overflow: hidden;
+  }
+
+</style>
+<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo"><img src="logo.png" alt="Super Nitro" style="height:90px;width:90px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,255,255,0.8));"></a>
+  <ul class="nav-links">
+    <li><a href="supernitro.html" class="active">Home</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="products.html">Products</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="shop.html" style="display:inline-block;text-decoration:none;" class="nav-cta">Shop Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+  <div class="hero-inner">
+    <div class="hero-badge">Drop 2 — For The 'Coldture — Dec 2025</div>
+
+    <div class="hero-label">
+      <span>SWEET NITRO</span>
+      <span>COLD BREW</span>
+    </div>
+
+    <h1 class="hero-title">
+      NITRO<span class="line2">COLD<br>BREW</span>
+    </h1>
+
+
+    <div class="hero-claims">
+      <span class="hero-claim">DAIRY FREE</span>
+      <span class="hero-claim">GLUTEN FREE</span>
+      <span class="hero-claim">NUT FREE</span>
+    </div>
+  </div>
+
+  <!-- Invisible anchor: 3D can renders in #can-fixed overlay -->
+  <div class="hero-product-img" id="heroProd" style="visibility:hidden;position:absolute;left:calc(8% + 690px);top:calc(80% - 280px);transform:none;"></div>
+
+  <div class="scroll-line">Scroll</div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker">
+    <span class="ticker-item">NITRO COLD BREW <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">BOLD BREW CONCENTRATE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">DAIRY FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">GLUTEN FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">NUT FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">FOR THE 'COLDTURE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">DROP 2 — DEC 2025 <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">SUPER NITRO <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">NITRO COLD BREW <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">BOLD BREW CONCENTRATE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">DAIRY FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">GLUTEN FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">NUT FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">FOR THE 'COLDTURE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">DROP 2 — DEC 2025 <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">SUPER NITRO <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">NITRO COLD BREW <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">BOLD BREW CONCENTRATE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">DAIRY FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">GLUTEN FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">NUT FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">FOR THE 'COLDTURE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">DROP 2 — DEC 2025 <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">SUPER NITRO <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">NITRO COLD BREW <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">BOLD BREW CONCENTRATE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">DAIRY FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">GLUTEN FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">NUT FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">FOR THE 'COLDTURE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">DROP 2 — DEC 2025 <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">SUPER NITRO <span class="ticker-sep">◆</span></span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="section-num">01 — Products</div>
+  <div class="products-header">
+    <h2 class="products-title">THE<br>LINE UP</h2>
+    <p class="products-sub">Premium nitro cold brew. No compromise.</p>
+  </div>
+
+  <div class="product-grid">
+    <!-- Card 1 -->
+    <div class="product-card" style="overflow:visible;">
+      <span class="product-card-label">Product 01 — Glass Pint</span>
+
+      <!-- Nitro Cold Brew glass illustration -->
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+        <canvas id="nitro-canvas" style="width:480px;height:480px;display:block;background:transparent;"></canvas>
+      </div>
+
+      <div>
+        <h3 class="product-card-name">NITRO<br>COLD<br>BREW</h3>
+        <p class="product-card-desc">Smooth, nitrogen-infused cold brew. Sweet. No dairy. No gluten. No nuts.</p>
+        <a href="https://www.supernitrocoldbrew.com/" class="product-card-cta" target="_blank">
+          Shop Now
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="product-card" style="overflow:visible;">
+      <span class="product-card-label">Product 02 — 32oz Concentrate</span>
+
+      <!-- Bold Brew bottle illustration -->
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+        <canvas id="bottle-canvas" style="width:480px;height:480px;display:block;background:transparent;"></canvas>
+      </div>
+
+      <div>
+        <h3 class="product-card-name">BOLD<br>BREW<br>CONC.</h3>
+        <p class="product-card-desc">32oz of cold brew concentrate. Makes up to 64oz. The whole house stays cold brewing.</p>
+        <a href="https://www.supernitrocoldbrew.com/" class="product-card-cta" target="_blank">
+          Shop Now
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATEMENT -->
+<div class="statement" id="statement-section" style="position:relative;overflow:visible;">
+  <p class="statement-eyebrow">Why Super Nitro</p>
+  <div class="statement-flex">
+    <h2 class="statement-text" id="statement-text">COLD IS NOT<br><span class="accent">JUST A DRINK.</span><br>IT'S A CULTURE.</h2>
+    <div id="statement-can-gap"></div>
+  </div>
+  <!-- anchor so fixed can tracks this position as section scrolls -->
+  <div id="statement-can-anchor" style="position:absolute;right:8%;top:50%;width:0;height:0;transform:translateY(-50%);"></div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="about">
+  <div class="features-grid">
+    <div class="feature-item">
+      <div class="feature-num">01</div>
+      <h3 class="feature-name">NITRO<br>SMOOTH</h3>
+      <p class="feature-desc">Nitrogen-infused for a velvet-smooth texture. Zero bitterness. Maximum bold.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">02</div>
+      <h3 class="feature-name">CLEAN<br>LABEL</h3>
+      <p class="feature-desc">Dairy free. Gluten free. Nut free. No junk. Just cold brew done right.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">03</div>
+      <h3 class="feature-name">DROP<br>CULTURE</h3>
+      <p class="feature-desc">Limited drops. For the 'Coldture. Glass pint. Merchandise. Community first.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BIG MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-word">NITRO</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-word">COLD</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-word">BREW</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-word">BOLD</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-word">SMOOTH</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-word">NITRO</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-word">COLD</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-word">BREW</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-word">BOLD</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-word">SMOOTH</span>
+    <span class="marquee-dot">·</span>
+  </div>
+</div>
+
+<!-- COLDTURE -->
+<section class="coldture" id="coldture">
+  <div class="coldture-inner">
+    <div class="coldture-img-wrap">
+      <div class="coldture-tag">Drop 2 — Dec 2025</div>
+      <!-- Can lineup illustration -->
+      <svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px;display:block">
+        <defs>
+          <linearGradient id="canGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:rgba(255,255,255,0.06)"/>
+            <stop offset="50%" style="stop-color:rgba(255,255,255,0.12)"/>
+            <stop offset="100%" style="stop-color:rgba(255,255,255,0.04)"/>
+          </linearGradient>
+          <linearGradient id="brewFill" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#c8a870"/>
+            <stop offset="40%" style="stop-color:#8b6020"/>
+            <stop offset="100%" style="stop-color:#2a1800"/>
+          </linearGradient>
+        </defs>
+        <!-- 5 cans -->
+        <g transform="translate(10, 20)">
+          <!-- Can 1 -->
+          <g transform="translate(0, 30)">
+            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#brewFill)"/>
+            <ellipse cx="36" cy="30" rx="36" ry="10" fill="#d4a868"/>
+            <ellipse cx="36" cy="290" rx="36" ry="10" fill="#2a1800"/>
+            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#canGrad)"/>
+            <circle cx="36" cy="160" r="22" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <text x="36" y="155" font-family="'Bebas Neue', sans-serif" font-size="10" fill="white" text-anchor="middle">SUPER</text>
+            <text x="36" y="167" font-family="'Bebas Neue', sans-serif" font-size="8" fill="white" text-anchor="middle">NITRO</text>
+            <!-- Straw -->
+            <line x1="50" y1="30" x2="62" y2="-20" stroke="rgba(200,200,200,0.7)" stroke-width="3" stroke-linecap="round"/>
+          </g>
+          <!-- Can 2 -->
+          <g transform="translate(80, 15)">
+            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#brewFill)"/>
+            <ellipse cx="36" cy="30" rx="36" ry="10" fill="#d4a868"/>
+            <ellipse cx="36" cy="290" rx="36" ry="10" fill="#2a1800"/>
+            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#canGrad)"/>
+            <circle cx="36" cy="160" r="22" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <text x="36" y="155" font-family="'Bebas Neue', sans-serif" font-size="10" fill="white" text-anchor="middle">SUPER</text>
+            <text x="36" y="167" font-family="'Bebas Neue', sans-serif" font-size="8" fill="white" text-anchor="middle">NITRO</text>
+            <line x1="50" y1="30" x2="66" y2="-30" stroke="rgba(200,200,200,0.7)" stroke-width="3" stroke-linecap="round"/>
+          </g>
+          <!-- Can 3 (center, tallest) -->
+          <g transform="translate(160, 0)">
+            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#brewFill)"/>
+            <ellipse cx="36" cy="30" rx="36" ry="10" fill="#d4a868"/>
+            <ellipse cx="36" cy="290" rx="36" ry="10" fill="#2a1800"/>
+            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#canGrad)"/>
+            <circle cx="36" cy="160" r="22" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+            <text x="36" y="155" font-family="'Bebas Neue', sans-serif" font-size="10" fill="white" text-anchor="middle">SUPER</text>
+            <text x="36" y="167" font-family="'Bebas Neue', sans-serif" font-size="8" fill="white" text-anchor="middle">NITRO</text>
+            <line x1="22" y1="30" x2="10" y2="-25" stroke="rgba(200,200,200,0.7)" stroke-width="3" stroke-linecap="round"/>
+          </g>
+          <!-- Can 4 -->
+          <g transform="translate(240, 15)">
+            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#brewFill)"/>
+            <ellipse cx="36" cy="30" rx="36" ry="10" fill="#d4a868"/>
+            <ellipse cx="36" cy="290" rx="36" ry="10" fill="#2a1800"/>
+            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#canGrad)"/>
+            <circle cx="36" cy="160" r="22" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <text x="36" y="155" font-family="'Bebas Neue', sans-serif" font-size="10" fill="white" text-anchor="middle">SUPER</text>
+            <text x="36" y="167" font-family="'Bebas Neue', sans-serif" font-size="8" fill="white" text-anchor="middle">NITRO</text>
+          </g>
+          <!-- Can 5 -->
+          <g transform="translate(320, 30)">
+            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#brewFill)"/>
+            <ellipse cx="36" cy="30" rx="36" ry="10" fill="#d4a868"/>
+            <ellipse cx="36" cy="290" rx="36" ry="10" fill="#2a1800"/>
+            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#canGrad)"/>
+            <circle cx="36" cy="160" r="22" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <text x="36" y="155" font-family="'Bebas Neue', sans-serif" font-size="10" fill="white" text-anchor="middle">SUPER</text>
+            <text x="36" y="167" font-family="'Bebas Neue', sans-serif" font-size="8" fill="white" text-anchor="middle">NITRO</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="coldture-content">
+      <div class="coldture-drop">Drop 2 — Glass Pint</div>
+      <h2 class="coldture-title">GOT<br>'EM</h2>
+      <p class="coldture-desc">
+        Limited drops for the culture that moves cold. Each release is an event. Miss it and wait for the next one. The 'Coldture doesn't wait.
+      </p>
+      <div>
+        <a href="https://www.supernitrocoldbrew.com/" class="btn-primary" target="_blank">
+          Shop Drop 2
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="https://www.supernitrocoldbrew.com/" class="btn-outline" target="_blank">Learn More</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FULL -->
+<section class="cta-full">
+  <h2 class="cta-title">STAY<br>COLD.</h2>
+  <a href="https://www.supernitrocoldbrew.com/" class="btn-black" target="_blank">
+    Order Now
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M1 8h14M8 1l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo"><img src="logo.png" alt="Super Nitro" style="height:80px;width:80px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,255,255,0.8));"></div>
+      <div class="footer-tagline">For The 'Coldture</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.supernitrocoldbrew.com/" target="_blank">Shop</a>
+      <a href="https://www.supernitrocoldbrew.com/" target="_blank">Products</a>
+      <a href="https://www.supernitrocoldbrew.com/" target="_blank">About</a>
+      <a href="https://www.supernitrocoldbrew.com/" target="_blank">Contact</a>
+    </div>
+    <div class="footer-links">
+      <a href="#" target="_blank">Instagram</a>
+      <a href="#" target="_blank">TikTok</a>
+      <a href="#" target="_blank">Twitter</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Super Nitro Cold Brew. All rights reserved.</span>
+    <div class="footer-social">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // CUSTOM CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    gsap.to(cursor, { x: mouseX - 6, y: mouseY - 6, duration: 0.1 });
+  });
+
+  // Ring follows with lag
+  function updateRing() {
+    ringX += (mouseX - ringX - 20) * 0.12;
+    ringY += (mouseY - ringY - 20) * 0.12;
+    gsap.set(ring, { x: ringX, y: ringY });
+    requestAnimationFrame(updateRing);
+  }
+  updateRing();
+
+  // Cursor expand on hover
+  document.querySelectorAll('a, button, .product-card, .feature-item').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      gsap.to(cursor, { scale: 3, duration: 0.3 });
+      gsap.to(ring, { scale: 0, opacity: 0, duration: 0.3 });
+    });
+    el.addEventListener('mouseleave', () => {
+      gsap.to(cursor, { scale: 1, duration: 0.3 });
+      gsap.to(ring, { scale: 1, opacity: 1, duration: 0.3 });
+    });
+  });
+
+  // TICKER animation
+  const ticker = document.getElementById('ticker');
+  gsap.to(ticker, {
+    x: () => -(ticker.scrollWidth / 4),
+    duration: 25,
+    ease: 'none',
+    repeat: -1
+  });
+
+  // MARQUEE animation - clone content to ensure seamless loop
+  const marquee = document.getElementById('marquee');
+  const originalHTML = marquee.innerHTML;
+  marquee.innerHTML = originalHTML + originalHTML + originalHTML + originalHTML;
+  const marqWidth = marquee.scrollWidth / 4;
+  gsap.set(marquee, { x: 0 });
+  gsap.to(marquee, {
+    x: -marqWidth,
+    duration: 20,
+    ease: 'none',
+    repeat: -1,
+    modifiers: {
+      x: gsap.utils.unitize(x => parseFloat(x) % marqWidth)
+    }
+  });
+
+  // HERO entrance
+  const tl = gsap.timeline({ delay: 0.2 });
+  tl.from('.hero-badge', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out' })
+    .from('.hero-label span', { y: 20, opacity: 0, duration: 0.6, stagger: 0.15, ease: 'power2.out' }, '-=0.4')
+    .from('.hero-title', { y: 60, opacity: 0, duration: 1, ease: 'power3.out' }, '-=0.4')
+    .from('#heroProd', { y: 40, opacity: 0, scale: 0.95, duration: 1.2, ease: 'power3.out' }, '-=0.8')
+    .from('.hero-claim', { y: 20, opacity: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' }, '-=0.6')
+    .from('.scroll-line', { opacity: 0, duration: 0.6 }, '-=0.2');
+
+  // (hero float removed — 3D can handled by Three.js)
+
+  // Hero text slides from left → center as page scrolls
+  gsap.to('.hero-inner', {
+    x: function() {
+      var el = document.querySelector('.hero-inner');
+      var rect = el.getBoundingClientRect();
+      return (window.innerWidth / 2) - (rect.left + rect.width / 2);
+    },
+    ease: 'power2.inOut',
+    scrollTrigger: {
+      trigger: '.hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 1
+    }
+  });
+
+  // SCROLL ANIMATIONS
+  // Products
+  gsap.from('.products-title', {
+    scrollTrigger: { trigger: '.products', start: 'top 80%' },
+    y: 60, opacity: 0, duration: 0.9, ease: 'power3.out'
+  });
+
+  gsap.from('.product-card', {
+    scrollTrigger: { trigger: '.product-grid', start: 'top 80%' },
+    y: 80, opacity: 0, duration: 0.9, stagger: 0.15, ease: 'power3.out'
+  });
+
+  // Statement
+  gsap.from('.statement-text', {
+    scrollTrigger: { trigger: '.statement', start: 'top 70%' },
+    y: 60, opacity: 0, duration: 1, ease: 'power3.out'
+  });
+
+  // Features
+  gsap.from('.feature-item', {
+    scrollTrigger: { trigger: '.features-grid', start: 'top 75%' },
+    y: 50, opacity: 0, duration: 0.8, stagger: 0.12, ease: 'power2.out'
+  });
+
+  // Coldture section
+  gsap.from('.coldture-img-wrap', {
+    scrollTrigger: { trigger: '.coldture', start: 'top 70%' },
+    x: -60, opacity: 0, duration: 1, ease: 'power3.out'
+  });
+  gsap.from('.coldture-content > *', {
+    scrollTrigger: { trigger: '.coldture', start: 'top 70%' },
+    y: 40, opacity: 0, duration: 0.8, stagger: 0.12, ease: 'power2.out'
+  });
+
+  // CTA
+  gsap.from('.cta-title', {
+    scrollTrigger: { trigger: '.cta-full', start: 'top 75%' },
+    y: 80, opacity: 0, duration: 1, ease: 'power3.out'
+  });
+  gsap.from('.btn-black', {
+    scrollTrigger: { trigger: '.cta-full', start: 'top 75%' },
+    y: 30, opacity: 0, duration: 0.7, delay: 0.3, ease: 'power2.out'
+  });
+
+  // Parallax on hero title
+  gsap.to('.hero-bg-text', {
+    scrollTrigger: {
+      trigger: '.hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true
+    },
+    y: 120
+  });
+
+  // Nav blend on scroll
+  const nav = document.querySelector('nav');
+  ScrollTrigger.create({
+    start: 10,
+    onEnter: () => nav.style.mixBlendMode = 'normal',
+    onLeaveBack: () => nav.style.mixBlendMode = 'difference'
+  });
+</script>
+
+
+<!-- 3D CAN — fixed overlay for scroll journey -->
+<div id="can-fixed">
+  <canvas id="can-canvas"></canvas>
+</div>
+
+<script>
+(function(){
+  var canFixed = document.getElementById('can-fixed');
+  var canvas   = document.getElementById('can-canvas');
+  var W = 500, H = 560;
+
+  /* ── Renderer ─────────────────────────────────────────────── */
+  var renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(W, H);
+  renderer.outputEncoding    = THREE.sRGBEncoding;
+  renderer.toneMapping       = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.6;
+
+  var scene  = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(45, W/H, 0.1, 100);
+  camera.position.z = 4.5;
+  camera.position.y = 0;
+  camera.lookAt(0, 0, 0);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 1.0));
+  var sun = new THREE.DirectionalLight(0xffffff, 1.8); sun.position.set(2,4,3); scene.add(sun);
+  var rim = new THREE.DirectionalLight(0xffffff, 0.6); rim.position.set(-2,-2,-3); scene.add(rim);
+
+  var wrapper = new THREE.Group();
+  scene.add(wrapper);
+  var rotY = 0;
+
+  /* ── Render loop ───────────────────────────────────────────── */
+  (function loop(){
+    requestAnimationFrame(loop);
+    wrapper.rotation.y = rotY;
+    wrapper.rotation.z = 0;
+    renderer.render(scene, camera);
+  })();
+
+  /* ── Decode + load GLB ─────────────────────────────────────── */
+  var b64 = '';
+  new THREE.GLTFLoader().load('Meshy_AI_Cold_Brew_Nitro_Coffe_0530101326_texture.glb',function(gltf){
+    var model = gltf.scene;
+
+    /* Fit the WHOLE can inside the frame — scale to 80% of visible height */
+    var box  = new THREE.Box3().setFromObject(model);
+    var size = new THREE.Vector3(); box.getSize(size);
+    /* visible height at z=0: 2*tan(FOV/2)*camZ */
+    var visH = 2 * Math.tan((45/2) * Math.PI/180) * camera.position.z;
+    var s    = (visH * 0.80) / Math.max(size.x, size.y, size.z);
+    model.scale.setScalar(s);
+    var ctr = new THREE.Vector3(); box.getCenter(ctr);
+    model.position.sub(ctr.multiplyScalar(s));
+
+    wrapper.add(model);
+    gsap.set(canFixed, { opacity:1 });
+    setupScroll();
+  }, function(e){ console.error('GLB:',e); });
+
+  /* ── Scroll animation ──────────────────────────────────────── */
+  function setupScroll(){
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var ar = document.getElementById('heroProd').getBoundingClientRect();
+    gsap.set(canFixed,{
+      position:'fixed', left:ar.left+ar.width/2, top:ar.top+ar.height/2,
+      xPercent:-50, yPercent:-50
+    });
+
+    var textRight = (vw + Math.min(1100, vw-80)) / 2;
+    var landX = Math.min(textRight+40, vw-160);
+    var landY = vh/2;
+    var st    = document.getElementById('statement-section');
+    var gap   = document.getElementById('statement-can-gap');
+
+    /* 1. Hero spin */
+    ScrollTrigger.create({ trigger:'.hero', start:'top top', end:'bottom top', scrub:1,
+      onUpdate:function(s){ rotY = s.progress * Math.PI * 2; }
+    });
+
+    /* 2. Travel: X position — hero → landing (ends at statement center) */
+    gsap.to(canFixed,{ left:landX, ease:'power2.inOut',
+      scrollTrigger:{ trigger:'.hero', start:'top top',
+        endTrigger:'#statement-section', end:'center center', scrub:1 }
+    });
+
+    /* 3. Travel: Y position — hero → past statement (one continuous motion, no jump)
+       Uses live getBoundingClientRect so stick is seamless with travel */
+    ScrollTrigger.create({
+      trigger:'.hero', start:'top top',
+      endTrigger:'#statement-section', end:'bottom top',
+      scrub:1,
+      onUpdate:function(s){
+        var stRect = st.getBoundingClientRect();
+        var stCenter = stRect.top + stRect.height/2; // anchor point in section
+
+        /* Before landing (section center above vh/2): travel toward landing */
+        if(stCenter > landY){
+          /* lerp from start to landY based on how close section center is */
+          var startY = ar.top + ar.height/2;
+          var prog = 1 - Math.max(0, Math.min(1,(stCenter - landY)/(startY - landY)));
+          canFixed.style.top = (startY + prog*(landY - startY)) + 'px';
+        } else {
+          /* After landing: follow section center exactly — no jump */
+          canFixed.style.top = stCenter + 'px';
+          gap.style.width = '340px';
+        }
+      }
+    });
+
+    /* 4. Gap opens as can arrives */
+    ScrollTrigger.create({ trigger:'#statement-section', start:'top center', end:'center center', scrub:1,
+      onUpdate:function(s){ gap.style.width = (s.progress*340)+'px'; }
+    });
+
+    /* Can stays visible — no fade out */
+  }
+})();
+</script>
+
+
+<script>
+(function(){
+  var canvas = document.getElementById('bottle-canvas');
+  if(!canvas) return;
+  var W = 480, H = 480;
+  var renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(W, H);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.6;
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(45, W/H, 0.1, 100);
+  camera.position.z = 4.5;
+  camera.position.y = 0;
+  camera.lookAt(0, 0, 0);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+  var sun = new THREE.DirectionalLight(0xffffff, 1.8); sun.position.set(2,4,3); scene.add(sun);
+  var rim = new THREE.DirectionalLight(0xffffff, 0.6); rim.position.set(-2,-2,-3); scene.add(rim);
+
+  var wrapper = new THREE.Group();
+  scene.add(wrapper);
+
+  (function loop(){ requestAnimationFrame(loop); renderer.render(scene, camera); })();
+
+  var b64 = '';
+  new THREE.GLTFLoader().load('Meshy_AI_Cold_Boom_Super_Nitro_0609102338_texture.glb',function(gltf){
+    var model = gltf.scene;
+    var box = new THREE.Box3().setFromObject(model);
+    var size = new THREE.Vector3(); box.getSize(size);
+    var visH = 2 * Math.tan((45/2) * Math.PI/180) * camera.position.z;
+    var visW = visH * (W/H);
+    var s = Math.min(visH * 0.90 / size.y, visW * 0.90 / size.x);
+    model.scale.setScalar(s);
+    var ctr = new THREE.Vector3(); box.getCenter(ctr);
+    model.position.sub(ctr.multiplyScalar(s));
+    
+    wrapper.add(model);
+  }, function(e){ console.error('Bottle GLB error:',e); });
+})();
+</script>
+
+<script>
+(function(){
+  var canvas = document.getElementById('nitro-canvas');
+  if(!canvas) return;
+  var W = 480, H = 480;
+  var renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(W, H);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.6;
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(45, W/H, 0.1, 100);
+  camera.position.z = 4.5;
+  camera.position.y = 0;
+  camera.lookAt(0, 0, 0);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 1.0));
+  var sun = new THREE.DirectionalLight(0xffffff, 1.8); sun.position.set(2,4,3); scene.add(sun);
+  var rim = new THREE.DirectionalLight(0xffffff, 0.6); rim.position.set(-2,-2,-3); scene.add(rim);
+
+  var wrapper = new THREE.Group();
+  scene.add(wrapper);
+
+  (function loop(){ requestAnimationFrame(loop); renderer.render(scene, camera); })();
+
+  var b64 = '';
+  new THREE.GLTFLoader().load('Meshy_AI_Nitro_Cold_Brew_in_a__0609103259_texture.glb',function(gltf){
+    var model = gltf.scene;
+    var box = new THREE.Box3().setFromObject(model);
+    var size = new THREE.Vector3(); box.getSize(size);
+    var visH = 2 * Math.tan((45/2) * Math.PI/180) * camera.position.z;
+    var visW = visH * (W/H);
+    var s = Math.min(visH * 0.90 / size.y, visW * 0.90 / size.x);
+    model.scale.setScalar(s);
+    var ctr = new THREE.Vector3(); box.getCenter(ctr);
+    model.position.sub(ctr.multiplyScalar(s));
+    wrapper.add(model);
+  }, function(e){ console.error('Nitro GLB error:',e); });
+})();
+</script>
+</body>
+</html>

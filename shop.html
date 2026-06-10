@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — Super Nitro Cold Brew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --black: #000;
+    --white: #fff;
+    --off-white: #f0ece4;
+    --gray: #111;
+    --mid-gray: #1a1a1a;
+    --border: rgba(255,255,255,0.08);
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: var(--font-body); overflow-x: hidden; cursor: none; }
+
+  /* CURSOR */
+  .cursor { width: 12px; height: 12px; background: var(--white); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; mix-blend-mode: difference; }
+  .cursor-ring { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; mix-blend-mode: difference; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 24px 40px; background: rgba(0,0,0,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-logo { font-family: var(--font-display); font-size: 22px; letter-spacing: 0.15em; color: var(--white); text-decoration: none; }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--white); }
+  .nav-cta { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--black); background: var(--white); border: none; padding: 10px 24px; cursor: none; transition: background 0.2s, transform 0.2s; }
+  .nav-cta:hover { background: var(--off-white); transform: scale(1.03); }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding: 160px 40px 80px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header-bg {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 28vw;
+    color: rgba(255,255,255,0.025);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+  .page-label { font-size: 10px; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 24px; }
+  .page-title { font-family: var(--font-display); font-size: clamp(80px, 12vw, 180px); line-height: 0.88; letter-spacing: -0.01em; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 40px;
+    border-bottom: 1px solid var(--border);
+    gap: 20px;
+  }
+  .filter-tabs { display: flex; gap: 0; }
+  .filter-tab {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase;
+    padding: 10px 24px; border: 1px solid var(--border); color: rgba(255,255,255,0.4);
+    background: transparent; cursor: none; transition: all 0.2s; margin-right: -1px;
+  }
+  .filter-tab:hover { color: var(--white); border-color: rgba(255,255,255,0.3); }
+  .filter-tab.active { color: var(--black); background: var(--white); border-color: var(--white); z-index: 1; }
+  .filter-count { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); text-transform: uppercase; }
+
+  /* SHOP GRID */
+  .shop-grid-wrap { padding: 60px 40px 120px; }
+  .shop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+
+  /* PRODUCT CARD */
+  .shop-card {
+    background: var(--mid-gray);
+    padding: 50px 40px;
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden; cursor: none;
+    transition: background 0.3s;
+    min-height: 600px;
+  }
+  .shop-card:hover { background: #161616; }
+  .shop-card.featured { background: var(--white); color: var(--black); grid-column: span 2; }
+  .shop-card.featured:hover { background: #f5f1e8; }
+
+  .shop-card-tag {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); margin-bottom: 40px;
+  }
+  .shop-card.featured .shop-card-tag { color: rgba(0,0,0,0.35); }
+
+  .shop-card-img { margin: 0 auto 40px; display: block; transition: transform 0.5s cubic-bezier(0.23,1,0.32,1); }
+  .shop-card:hover .shop-card-img { transform: translateY(-14px) scale(1.04); }
+
+  .shop-card-name { font-family: var(--font-display); font-size: clamp(36px,4vw,64px); line-height: 0.9; letter-spacing: -0.01em; margin-bottom: 12px; }
+  .shop-card.featured .shop-card-name { font-size: clamp(50px,6vw,100px); }
+  .shop-card-sub { font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.35); letter-spacing: 0.05em; margin-bottom: auto; }
+  .shop-card.featured .shop-card-sub { color: rgba(0,0,0,0.4); }
+
+  .shop-card-footer { display: flex; align-items: flex-end; justify-content: space-between; margin-top: 40px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08); }
+  .shop-card.featured .shop-card-footer { border-top-color: rgba(0,0,0,0.1); }
+  .shop-card-price { font-family: var(--font-display); font-size: 48px; letter-spacing: -0.02em; }
+  .shop-card-price-sub { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px; }
+  .shop-card.featured .shop-card-price-sub { color: rgba(0,0,0,0.35); }
+
+  .btn-add {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 14px 28px; border: 1px solid rgba(255,255,255,0.25); background: transparent;
+    color: var(--white); cursor: none; transition: all 0.25s; display: flex; align-items: center; gap: 10px;
+  }
+  .btn-add:hover { background: var(--white); color: var(--black); border-color: var(--white); }
+  .btn-add.dark { border-color: rgba(0,0,0,0.25); color: var(--black); }
+  .btn-add.dark:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+
+  /* BUNDLE ROW */
+  .bundle-row {
+    margin: 0 40px;
+    border: 1px solid var(--border);
+    padding: 50px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 40px; margin-bottom: 2px; cursor: none;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .bundle-row:hover { border-color: rgba(255,255,255,0.25); background: var(--mid-gray); }
+  .bundle-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; padding: 5px 12px; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); display: inline-block; margin-bottom: 12px; }
+  .bundle-name { font-family: var(--font-display); font-size: clamp(32px,4vw,60px); line-height: 0.9; }
+  .bundle-desc { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.7; max-width: 320px; }
+  .bundle-price-group { text-align: right; flex-shrink: 0; }
+  .bundle-orig { font-size: 13px; color: rgba(255,255,255,0.25); text-decoration: line-through; margin-bottom: 4px; }
+  .bundle-price { font-family: var(--font-display); font-size: 56px; letter-spacing: -0.02em; }
+  .bundle-save { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 20px; }
+
+  /* TICKER */
+  .ticker-wrap { overflow: hidden; background: var(--white); padding: 12px 0; }
+  .ticker { display: flex; white-space: nowrap; will-change: transform; }
+  .ticker-item { font-family: var(--font-display); font-size: 16px; letter-spacing: 0.1em; color: var(--black); padding: 0 32px; flex-shrink: 0; }
+  .ticker-sep { color: rgba(0,0,0,0.3); margin: 0 8px; }
+
+  /* FOOTER */
+  footer { background: var(--black); border-top: 1px solid var(--border); padding: 60px 40px 40px; }
+  .footer-inner { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 50px; }
+  .footer-logo { font-family: var(--font-display); font-size: 36px; letter-spacing: 0.05em; }
+  .footer-tagline { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 6px; }
+  .footer-links { display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; cursor: none; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-bottom { display: flex; justify-content: space-between; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .footer-copy { font-size: 10px; color: rgba(255,255,255,0.2); letter-spacing: 0.15em; }
+
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    .page-header { padding: 120px 24px 60px; }
+    .filter-bar { padding: 20px 24px; }
+    .shop-grid-wrap { padding: 40px 24px 80px; }
+    .shop-grid { grid-template-columns: 1fr; }
+    .shop-card.featured { grid-column: span 1; }
+    .bundle-row { flex-direction: column; align-items: flex-start; margin: 0 24px; }
+    .bundle-price-group { text-align: left; }
+    .footer-inner { flex-direction: column; gap: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="supernitro.html" class="nav-logo">SUPER NITRO</a>
+  <ul class="nav-links">
+    <li><a href="supernitro.html">Home</a></li>
+    <li><a href="shop.html" class="active">Shop</a></li>
+    <li><a href="products.html">Products</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <button class="nav-cta">Cart (0)</button>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-bg">SHOP</div>
+  <div class="page-label">Super Nitro — The Store</div>
+  <h1 class="page-title" id="pageTitle">SHOP<br>THE<br>LINE</h1>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-tabs">
+    <button class="filter-tab active">All</button>
+    <button class="filter-tab">Drinks</button>
+    <button class="filter-tab">Concentrate</button>
+    <button class="filter-tab">Bundles</button>
+  </div>
+  <span class="filter-count">4 Products</span>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker">
+    <span class="ticker-item">FREE SHIPPING ON ORDERS $40+ <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">DAIRY FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">GLUTEN FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">NUT FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">NITROGEN INFUSED <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">FREE SHIPPING ON ORDERS $40+ <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">DAIRY FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">GLUTEN FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">NUT FREE <span class="ticker-sep">◆</span></span>
+    <span class="ticker-item">NITROGEN INFUSED <span class="ticker-sep">◆</span></span>
+  </div>
+</div>
+
+<!-- SHOP GRID -->
+<div class="shop-grid-wrap">
+  <div class="shop-grid">
+
+    <!-- Featured: Nitro Cold Brew -->
+    <div class="shop-card featured" id="card1">
+      <span class="shop-card-tag">Best Seller — Drop 2</span>
+      <div style="display:flex;justify-content:center;">
+        <svg class="shop-card-img" viewBox="0 0 220 400" xmlns="http://www.w3.org/2000/svg" style="width:240px;filter:drop-shadow(0 20px 50px rgba(0,0,0,0.2))">
+          <defs>
+            <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:rgba(0,0,0,0.06)"/><stop offset="40%" style="stop-color:rgba(0,0,0,0.1)"/><stop offset="100%" style="stop-color:rgba(0,0,0,0.04)"/></linearGradient>
+            <linearGradient id="b1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#3a2010"/><stop offset="100%" style="stop-color:#080400"/></linearGradient>
+          </defs>
+          <path d="M42 65 L32 368 Q32 385 110 385 Q188 385 188 368 L178 65 Z" fill="url(#b1)"/>
+          <ellipse cx="110" cy="67" rx="68" ry="20" fill="rgba(240,230,210,0.95)"/>
+          <path d="M42 67 Q42 46 110 46 Q178 46 178 67 L178 86 Q178 98 110 98 Q42 98 42 86 Z" fill="rgba(240,230,210,0.92)"/>
+          <path d="M42 86 L32 368 Q32 385 110 385 Q188 385 188 368 L178 86 Z" fill="url(#g1)"/>
+          <path d="M50 102 L42 345" stroke="rgba(0,0,0,0.06)" stroke-width="2.5" fill="none"/>
+        </svg>
+      </div>
+      <h3 class="shop-card-name">SWEET<br>NITRO<br>COLD BREW</h3>
+      <p class="shop-card-sub">Smooth. Nitrogen-infused. Zero dairy, gluten, nuts.</p>
+      <div class="shop-card-footer">
+        <div>
+          <div class="shop-card-price">$6</div>
+          <div class="shop-card-price-sub">Per glass pint</div>
+        </div>
+        <button class="btn-add dark">
+          Add to Cart
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bold Brew Concentrate -->
+    <div class="shop-card" id="card2">
+      <span class="shop-card-tag">Product 02</span>
+      <div style="display:flex;justify-content:center;">
+        <svg class="shop-card-img" viewBox="0 0 160 380" xmlns="http://www.w3.org/2000/svg" style="width:130px;filter:drop-shadow(0 20px 50px rgba(0,0,0,0.7))">
+          <defs>
+            <linearGradient id="bottle2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#0d0d0d"/><stop offset="35%" style="stop-color:#222"/><stop offset="100%" style="stop-color:#080808"/></linearGradient>
+          </defs>
+          <path d="M65 18 L65 55 Q42 64 34 90 L26 348 Q26 365 80 365 Q134 365 134 348 L126 90 Q118 64 95 55 L95 18 Z" fill="url(#bottle2)"/>
+          <rect x="60" y="8" width="40" height="14" rx="3" fill="#1e1e1e"/>
+          <rect x="30" y="136" width="100" height="180" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+          <text x="80" y="192" font-family="'Bebas Neue',sans-serif" font-size="30" fill="rgba(255,255,255,0.92)" text-anchor="middle" letter-spacing="1">BOLD</text>
+          <text x="80" y="222" font-family="'Bebas Neue',sans-serif" font-size="26" fill="rgba(255,255,255,0.7)" text-anchor="middle" letter-spacing="1">BREW</text>
+          <text x="80" y="242" font-family="'Bebas Neue',sans-serif" font-size="11" fill="rgba(255,255,255,0.3)" text-anchor="middle" letter-spacing="3">CONCENTRATE</text>
+          <rect x="48" y="252" width="64" height="1" fill="rgba(190,155,85,0.5)"/>
+          <text x="80" y="270" font-family="'Bebas Neue',sans-serif" font-size="9" fill="rgba(190,155,85,0.55)" text-anchor="middle" letter-spacing="2">MAKES UP TO 64 OZ</text>
+          <path d="M34 108 L32 325" stroke="rgba(255,255,255,0.05)" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <h3 class="shop-card-name">BOLD<br>BREW<br>CONC.</h3>
+      <p class="shop-card-sub">32oz concentrate. Makes up to 64oz of cold brew.</p>
+      <div class="shop-card-footer">
+        <div>
+          <div class="shop-card-price">$18</div>
+          <div class="shop-card-price-sub">32oz bottle</div>
+        </div>
+        <button class="btn-add">
+          Add to Cart
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Glass Pint 4-Pack -->
+    <div class="shop-card" id="card3">
+      <span class="shop-card-tag">Product 03 — Multi-Pack</span>
+      <div style="display:flex;justify-content:center;gap:10px;margin:30px 0 40px;">
+        <svg viewBox="0 0 80 300" xmlns="http://www.w3.org/2000/svg" style="width:55px;filter:drop-shadow(0 10px 30px rgba(0,0,0,0.8))">
+          <defs><linearGradient id="sm1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#3a2010"/><stop offset="100%" style="stop-color:#050200"/></linearGradient></defs>
+          <path d="M14 24 L10 280 Q10 292 40 292 Q70 292 70 280 L66 24 Z" fill="url(#sm1)"/>
+          <ellipse cx="40" cy="25" rx="26" ry="8" fill="rgba(240,230,210,0.9)"/>
+          <path d="M14 25 Q14 14 40 14 Q66 14 66 25 L66 36 Q66 44 40 44 Q14 44 14 36 Z" fill="rgba(240,230,210,0.88)"/>
+          <path d="M14 36 L10 280 Q10 292 40 292 Q70 292 70 280 L66 36 Z" fill="rgba(255,255,255,0.06)"/>
+        </svg>
+        <svg viewBox="0 0 80 300" xmlns="http://www.w3.org/2000/svg" style="width:55px;margin-top:-12px;filter:drop-shadow(0 10px 30px rgba(0,0,0,0.8))">
+          <path d="M14 24 L10 280 Q10 292 40 292 Q70 292 70 280 L66 24 Z" fill="url(#sm1)"/>
+          <ellipse cx="40" cy="25" rx="26" ry="8" fill="rgba(240,230,210,0.9)"/>
+          <path d="M14 25 Q14 14 40 14 Q66 14 66 25 L66 36 Q66 44 40 44 Q14 44 14 36 Z" fill="rgba(240,230,210,0.88)"/>
+          <path d="M14 36 L10 280 Q10 292 40 292 Q70 292 70 280 L66 36 Z" fill="rgba(255,255,255,0.06)"/>
+        </svg>
+        <svg viewBox="0 0 80 300" xmlns="http://www.w3.org/2000/svg" style="width:55px;filter:drop-shadow(0 10px 30px rgba(0,0,0,0.8))">
+          <path d="M14 24 L10 280 Q10 292 40 292 Q70 292 70 280 L66 24 Z" fill="url(#sm1)"/>
+          <ellipse cx="40" cy="25" rx="26" ry="8" fill="rgba(240,230,210,0.9)"/>
+          <path d="M14 25 Q14 14 40 14 Q66 14 66 25 L66 36 Q66 44 40 44 Q14 44 14 36 Z" fill="rgba(240,230,210,0.88)"/>
+          <path d="M14 36 L10 280 Q10 292 40 292 Q70 292 70 280 L66 36 Z" fill="rgba(255,255,255,0.06)"/>
+        </svg>
+        <svg viewBox="0 0 80 300" xmlns="http://www.w3.org/2000/svg" style="width:55px;margin-top:-12px;filter:drop-shadow(0 10px 30px rgba(0,0,0,0.8))">
+          <path d="M14 24 L10 280 Q10 292 40 292 Q70 292 70 280 L66 24 Z" fill="url(#sm1)"/>
+          <ellipse cx="40" cy="25" rx="26" ry="8" fill="rgba(240,230,210,0.9)"/>
+          <path d="M14 25 Q14 14 40 14 Q66 14 66 25 L66 36 Q66 44 40 44 Q14 44 14 36 Z" fill="rgba(240,230,210,0.88)"/>
+          <path d="M14 36 L10 280 Q10 292 40 292 Q70 292 70 280 L66 36 Z" fill="rgba(255,255,255,0.06)"/>
+        </svg>
+      </div>
+      <h3 class="shop-card-name">NITRO<br>4-PACK</h3>
+      <p class="shop-card-sub">Four glass pints. Stock the fridge. Stay cold.</p>
+      <div class="shop-card-footer">
+        <div>
+          <div class="shop-card-price">$22</div>
+          <div class="shop-card-price-sub">4 × Glass Pint</div>
+        </div>
+        <button class="btn-add">
+          Add to Cart
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Merch / Drop item -->
+    <div class="shop-card" id="card4">
+      <span class="shop-card-tag">Limited — Drop 2 Merch</span>
+      <div style="display:flex;justify-content:center;align-items:center;height:220px;margin-bottom:30px;">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:160px;opacity:0.9">
+          <!-- Super Nitro Logo-style mark -->
+          <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="70" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <!-- N mark -->
+          <text x="100" y="125" font-family="'Bebas Neue',sans-serif" font-size="90" fill="white" text-anchor="middle" letter-spacing="-2">N</text>
+          <!-- Lightning bolt accent -->
+          <polygon points="108,70 98,100 108,100 92,130 102,100 92,100" fill="rgba(255,255,255,0.2)"/>
+        </svg>
+      </div>
+      <h3 class="shop-card-name">LOGO<br>GLASS<br>PINT</h3>
+      <p class="shop-card-sub">Branded glass pint. Limited to each drop. Collect them all.</p>
+      <div class="shop-card-footer">
+        <div>
+          <div class="shop-card-price">$28</div>
+          <div class="shop-card-price-sub">Limited drop item</div>
+        </div>
+        <button class="btn-add">
+          Add to Cart
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BUNDLES -->
+<div class="bundle-row" id="bundle1">
+  <div>
+    <span class="bundle-badge">Best Value</span>
+    <h3 class="bundle-name">THE STARTER<br>BUNDLE</h3>
+    <p class="bundle-desc">4-pack of Nitro Cold Brew + one 32oz Bold Brew Concentrate. Everything you need to stay cold.</p>
+  </div>
+  <div class="bundle-price-group">
+    <div class="bundle-orig">$40</div>
+    <div class="bundle-price">$34</div>
+    <div class="bundle-save">Save $6</div>
+    <button class="btn-add">
+      Add Bundle
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="bundle-row" id="bundle2" style="margin-bottom:80px;">
+  <div>
+    <span class="bundle-badge">For The 'Coldture</span>
+    <h3 class="bundle-name">THE DROP 2<br>FULL KIT</h3>
+    <p class="bundle-desc">4-pack Nitro + Bold Brew Concentrate + Limited Drop 2 Logo Glass. The complete coldture experience.</p>
+  </div>
+  <div class="bundle-price-group">
+    <div class="bundle-orig">$62</div>
+    <div class="bundle-price">$52</div>
+    <div class="bundle-save">Save $10</div>
+    <button class="btn-add">
+      Add Bundle
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">SUPER NITRO</div>
+      <div class="footer-tagline">For The 'Coldture</div>
+    </div>
+    <div class="footer-links">
+      <a href="shop.html">Shop</a>
+      <a href="products.html">Products</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-links">
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">Twitter / X</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Super Nitro Cold Brew. All rights reserved.</span>
+    <span class="footer-copy">Dairy Free · Gluten Free · Nut Free</span>
+  </div>
+</footer>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    gsap.to(cursor, { x: mx-6, y: my-6, duration: 0.1 });
+  });
+  (function tick() {
+    rx += (mx - rx - 20) * 0.12;
+    ry += (my - ry - 20) * 0.12;
+    gsap.set(ring, { x: rx, y: ry });
+    requestAnimationFrame(tick);
+  })();
+  document.querySelectorAll('a,button,.shop-card,.bundle-row').forEach(el => {
+    el.addEventListener('mouseenter', () => { gsap.to(cursor, {scale:3,duration:0.3}); gsap.to(ring,{scale:0,opacity:0,duration:0.3}); });
+    el.addEventListener('mouseleave', () => { gsap.to(cursor, {scale:1,duration:0.3}); gsap.to(ring,{scale:1,opacity:1,duration:0.3}); });
+  });
+
+  // TICKER
+  const tick = document.getElementById('ticker');
+  gsap.to(tick, { x: -(tick.scrollWidth/2), duration: 22, ease:'none', repeat:-1 });
+
+  // ENTRANCE
+  gsap.from('#pageTitle', { y: 80, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.2 });
+  gsap.from('.page-label', { y: 20, opacity: 0, duration: 0.7, ease: 'power2.out', delay: 0.1 });
+
+  // SCROLL
+  gsap.from(['#card1','#card2','#card3','#card4'], {
+    scrollTrigger: { trigger: '.shop-grid', start: 'top 80%' },
+    y: 60, opacity: 0, duration: 0.8, stagger: 0.12, ease: 'power3.out'
+  });
+  gsap.from(['#bundle1','#bundle2'], {
+    scrollTrigger: { trigger: '#bundle1', start: 'top 85%' },
+    y: 40, opacity: 0, duration: 0.7, stagger: 0.15, ease: 'power2.out'
+  });
+
+  // FILTER TABS
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // CART BUTTON FEEDBACK
+  document.querySelectorAll('.btn-add').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const orig = btn.innerHTML;
+      btn.innerHTML = 'Added ✓';
+      btn.style.background = btn.classList.contains('dark') ? '#000' : '#fff';
+      btn.style.color = btn.classList.contains('dark') ? '#fff' : '#000';
+      setTimeout(() => { btn.innerHTML = orig; btn.style.background=''; btn.style.color=''; }, 1800);
+    });
+  });
+</script>
+</body>
+</html>
