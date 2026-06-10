@@ -186,7 +186,7 @@
 
   .hero-title {
     font-family: var(--font-display);
-    font-size: clamp(120px, 21vw, 320px);
+    font-size: clamp(72px, 12vw, 180px);
     line-height: 0.85;
     letter-spacing: -0.02em;
     color: var(--white);
@@ -743,8 +743,8 @@
   /* ── CAN JOURNEY ─────────────────────────────────────────────── */
   #can-fixed {
     position: fixed;
-    width: 500px;
-    height: 560px;
+    width: 360px;
+    height: 400px;
     pointer-events: none;
     z-index: 4;          /* below ticker z-index:5 → goes under it */
     opacity: 0;
@@ -824,7 +824,7 @@
   </div>
 
   <!-- Invisible anchor: 3D can renders in #can-fixed overlay -->
-  <div class="hero-product-img" id="heroProd" style="visibility:hidden;position:absolute;left:calc(8% + 690px);top:calc(80% - 280px);transform:none;"></div>
+  <div class="hero-product-img" id="heroProd" style="visibility:hidden;position:absolute;left:calc(8% + 600px);top:calc(65% - 100px);transform:none;"></div>
 
   <div class="scroll-line">Scroll</div>
 </section>
@@ -1269,7 +1269,7 @@
 (function(){
   var canFixed = document.getElementById('can-fixed');
   var canvas   = document.getElementById('can-canvas');
-  var W = 500, H = 560;
+  var W = 360, H = 400;
 
   /* ── Renderer ─────────────────────────────────────────────── */
   var renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true, antialias:true });
