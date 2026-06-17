@@ -881,7 +881,7 @@
       <span class="product-card-label">Product 01 — Glass Pint</span>
 
       <!-- Nitro Cold Brew glass illustration -->
-      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+      <div style="position:absolute;top:50%;left:60%;transform:translate(-50%,-50%);">
         <canvas id="nitro-canvas" style="width:480px;height:480px;display:block;background:transparent;"></canvas>
       </div>
 
@@ -900,7 +900,7 @@
       <span class="product-card-label">Product 02 — 32oz Concentrate</span>
 
       <!-- Bold Brew bottle illustration -->
-      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+      <div style="position:absolute;top:50%;left:60%;transform:translate(-50%,-50%);">
         <canvas id="bottle-canvas" style="width:540px;height:540px;display:block;background:transparent;"></canvas>
       </div>
 
@@ -1416,7 +1416,7 @@
     var size = new THREE.Vector3(); box.getSize(size);
     var visH = 2 * Math.tan((45/2) * Math.PI/180) * camera.position.z;
     var visW = visH * (W/H);
-    var s = Math.min(visH * 0.95 / size.y, visW * 0.95 / size.x);
+    var s = Math.min(visH * 0.80 / size.y, visW * 0.80 / size.x);
     model.scale.setScalar(s);
     var ctr = new THREE.Vector3(); box.getCenter(ctr);
     model.position.sub(ctr.multiplyScalar(s));
