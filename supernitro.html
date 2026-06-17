@@ -1410,7 +1410,7 @@
   (function loop(){ requestAnimationFrame(loop); renderer.render(scene, camera); })();
 
   var b64 = '';
-  new THREE.GLTFLoader().load('Meshy_AI_Cold_Boom_Super_Nitro_0609102338_texture.glb',function(gltf){
+  new THREE.GLTFLoader().load('Meshy_AI_Cold_Boom_Super_Nitro_0609055353_texture.glb',function(gltf){
     var model = gltf.scene;
     var box = new THREE.Box3().setFromObject(model);
     var size = new THREE.Vector3(); box.getSize(size);
