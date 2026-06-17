@@ -743,8 +743,8 @@
   /* ── CAN JOURNEY ─────────────────────────────────────────────── */
   #can-fixed {
     position: fixed;
-    width: 360px;
-    height: 400px;
+    width: 450px;
+    height: 500px;
     pointer-events: none;
     z-index: 4;          /* below ticker z-index:5 → goes under it */
     opacity: 0;
@@ -1269,7 +1269,7 @@
 (function(){
   var canFixed = document.getElementById('can-fixed');
   var canvas   = document.getElementById('can-canvas');
-  var W = 360, H = 400;
+  var W = 450, H = 500;
 
   /* ── Renderer ─────────────────────────────────────────────── */
   var renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true, antialias:true });
@@ -1311,7 +1311,7 @@
     var size = new THREE.Vector3(); box.getSize(size);
     /* visible height at z=0: 2*tan(FOV/2)*camZ */
     var visH = 2 * Math.tan((45/2) * Math.PI/180) * camera.position.z;
-    var s    = (visH * 0.92) / Math.max(size.x, size.y, size.z);
+    var s    = (visH * 0.80) / Math.max(size.x, size.y, size.z);
     model.scale.setScalar(s);
     var ctr = new THREE.Vector3(); box.getCenter(ctr);
     model.position.sub(ctr.multiplyScalar(s));
