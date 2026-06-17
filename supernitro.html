@@ -459,6 +459,25 @@
     border-top: 1px solid rgba(255,255,255,0.08);
     overflow: hidden;
     padding: 120px 40px;
+    position: relative;
+    min-height: 720px;
+    display: flex;
+    align-items: flex-end;
+  }
+  .coldture-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .coldture-buttons {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
   }
 
   .coldture-inner {
@@ -976,97 +995,15 @@
 
 <!-- COLDTURE -->
 <section class="coldture" id="coldture">
-  <div class="coldture-inner">
-    <div class="coldture-img-wrap">
-      <div class="coldture-tag">Drop 2 — Dec 2025</div>
-      <!-- Can lineup illustration -->
-      <svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px;display:block">
-        <defs>
-          <linearGradient id="canGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:rgba(255,255,255,0.06)"/>
-            <stop offset="50%" style="stop-color:rgba(255,255,255,0.12)"/>
-            <stop offset="100%" style="stop-color:rgba(255,255,255,0.04)"/>
-          </linearGradient>
-          <linearGradient id="brewFill" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:#c8a870"/>
-            <stop offset="40%" style="stop-color:#8b6020"/>
-            <stop offset="100%" style="stop-color:#2a1800"/>
-          </linearGradient>
-        </defs>
-        <!-- 5 cans -->
-        <g transform="translate(10, 20)">
-          <!-- Can 1 -->
-          <g transform="translate(0, 30)">
-            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#brewFill)"/>
-            <ellipse cx="36" cy="30" rx="36" ry="10" fill="#d4a868"/>
-            <ellipse cx="36" cy="290" rx="36" ry="10" fill="#2a1800"/>
-            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#canGrad)"/>
-            <circle cx="36" cy="160" r="22" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-            <text x="36" y="155" font-family="'Bebas Neue', sans-serif" font-size="10" fill="white" text-anchor="middle">SUPER</text>
-            <text x="36" y="167" font-family="'Bebas Neue', sans-serif" font-size="8" fill="white" text-anchor="middle">NITRO</text>
-            <!-- Straw -->
-            <line x1="50" y1="30" x2="62" y2="-20" stroke="rgba(200,200,200,0.7)" stroke-width="3" stroke-linecap="round"/>
-          </g>
-          <!-- Can 2 -->
-          <g transform="translate(80, 15)">
-            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#brewFill)"/>
-            <ellipse cx="36" cy="30" rx="36" ry="10" fill="#d4a868"/>
-            <ellipse cx="36" cy="290" rx="36" ry="10" fill="#2a1800"/>
-            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#canGrad)"/>
-            <circle cx="36" cy="160" r="22" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-            <text x="36" y="155" font-family="'Bebas Neue', sans-serif" font-size="10" fill="white" text-anchor="middle">SUPER</text>
-            <text x="36" y="167" font-family="'Bebas Neue', sans-serif" font-size="8" fill="white" text-anchor="middle">NITRO</text>
-            <line x1="50" y1="30" x2="66" y2="-30" stroke="rgba(200,200,200,0.7)" stroke-width="3" stroke-linecap="round"/>
-          </g>
-          <!-- Can 3 (center, tallest) -->
-          <g transform="translate(160, 0)">
-            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#brewFill)"/>
-            <ellipse cx="36" cy="30" rx="36" ry="10" fill="#d4a868"/>
-            <ellipse cx="36" cy="290" rx="36" ry="10" fill="#2a1800"/>
-            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#canGrad)"/>
-            <circle cx="36" cy="160" r="22" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
-            <text x="36" y="155" font-family="'Bebas Neue', sans-serif" font-size="10" fill="white" text-anchor="middle">SUPER</text>
-            <text x="36" y="167" font-family="'Bebas Neue', sans-serif" font-size="8" fill="white" text-anchor="middle">NITRO</text>
-            <line x1="22" y1="30" x2="10" y2="-25" stroke="rgba(200,200,200,0.7)" stroke-width="3" stroke-linecap="round"/>
-          </g>
-          <!-- Can 4 -->
-          <g transform="translate(240, 15)">
-            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#brewFill)"/>
-            <ellipse cx="36" cy="30" rx="36" ry="10" fill="#d4a868"/>
-            <ellipse cx="36" cy="290" rx="36" ry="10" fill="#2a1800"/>
-            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#canGrad)"/>
-            <circle cx="36" cy="160" r="22" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-            <text x="36" y="155" font-family="'Bebas Neue', sans-serif" font-size="10" fill="white" text-anchor="middle">SUPER</text>
-            <text x="36" y="167" font-family="'Bebas Neue', sans-serif" font-size="8" fill="white" text-anchor="middle">NITRO</text>
-          </g>
-          <!-- Can 5 -->
-          <g transform="translate(320, 30)">
-            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#brewFill)"/>
-            <ellipse cx="36" cy="30" rx="36" ry="10" fill="#d4a868"/>
-            <ellipse cx="36" cy="290" rx="36" ry="10" fill="#2a1800"/>
-            <rect x="0" y="30" width="72" height="260" rx="12" fill="url(#canGrad)"/>
-            <circle cx="36" cy="160" r="22" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-            <text x="36" y="155" font-family="'Bebas Neue', sans-serif" font-size="10" fill="white" text-anchor="middle">SUPER</text>
-            <text x="36" y="167" font-family="'Bebas Neue', sans-serif" font-size="8" fill="white" text-anchor="middle">NITRO</text>
-          </g>
-        </g>
-      </svg>
-    </div>
-
-    <div class="coldture-content">
-      <div class="coldture-drop">Drop 2 — Glass Pint</div>
-      <h2 class="coldture-title">GOT<br>'EM</h2>
-      <p class="coldture-desc">
-        Limited drops for the culture that moves cold. Each release is an event. Miss it and wait for the next one. The 'Coldture doesn't wait.
-      </p>
-      <div>
-        <a href="https://www.supernitrocoldbrew.com/" class="btn-primary" target="_blank">
-          Shop Drop 2
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a href="https://www.supernitrocoldbrew.com/" class="btn-outline" target="_blank">Learn More</a>
-      </div>
-    </div>
+  <video class="coldture-video" id="coldtureVideo" loop muted playsinline preload="auto">
+    <source src="coldture.mp4" type="video/mp4">
+  </video>
+  <div class="coldture-buttons">
+    <a href="https://www.supernitrocoldbrew.com/" class="btn-primary" target="_blank">
+      Shop Drop 2
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="https://www.supernitrocoldbrew.com/" class="btn-outline" target="_blank">Learn More</a>
   </div>
 </section>
 
@@ -1466,6 +1403,48 @@
     model.position.sub(ctr.multiplyScalar(s));
     wrapper.add(model);
   }, function(e){ console.error('Nitro GLB error:',e); });
+})();
+</script>
+<script>
+(function(){
+  var v = document.getElementById('coldtureVideo');
+  if(!v) return;
+  var audioUnlocked = false;
+  ['click','keydown','touchstart'].forEach(function(ev){
+    window.addEventListener(ev, function unlock(){
+      audioUnlocked = true;
+      if(!v.paused){ v.muted = false; }
+      window.removeEventListener(ev, unlock);
+    }, {once:true});
+  });
+  function playWithSound(){
+    try { v.currentTime = 0; } catch(e){}
+    if(audioUnlocked){ v.muted = false; }
+    var p = v.play();
+    if(p && p.catch){ p.catch(function(){ v.muted = true; v.play(); }); }
+  }
+  if(window.ScrollTrigger){
+    ScrollTrigger.create({
+      trigger: '#coldture',
+      start: 'top 70%',
+      end: 'bottom top',
+      onEnter: playWithSound,
+      onEnterBack: playWithSound,
+      onLeave: function(){ v.pause(); },
+      onLeaveBack: function(){ v.pause(); }
+    });
+  } else {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ playWithSound(); } else { v.pause(); } });
+    }, {threshold:0.4});
+    io.observe(document.getElementById('coldture'));
+  }
+  if(window.gsap){
+    gsap.fromTo('.coldture-video',
+      {clipPath:'inset(0 100% 0 0)'},
+      {clipPath:'inset(0 0% 0 0)', duration:1.1, ease:'power3.out',
+       scrollTrigger:{ trigger:'#coldture', start:'top 70%' }});
+  }
 })();
 </script>
 </body>
