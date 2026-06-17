@@ -901,7 +901,7 @@
 
       <!-- Bold Brew bottle illustration -->
       <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
-        <canvas id="bottle-canvas" style="width:480px;height:480px;display:block;background:transparent;"></canvas>
+        <canvas id="bottle-canvas" style="width:540px;height:540px;display:block;background:transparent;"></canvas>
       </div>
 
       <div>
@@ -1386,7 +1386,7 @@
 (function(){
   var canvas = document.getElementById('bottle-canvas');
   if(!canvas) return;
-  var W = 480, H = 480;
+  var W = 540, H = 540;
   var renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true, antialias:true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
   renderer.setSize(W, H);
@@ -1416,7 +1416,7 @@
     var size = new THREE.Vector3(); box.getSize(size);
     var visH = 2 * Math.tan((45/2) * Math.PI/180) * camera.position.z;
     var visW = visH * (W/H);
-    var s = Math.min(visH * 0.90 / size.y, visW * 0.90 / size.x);
+    var s = Math.min(visH * 0.95 / size.y, visW * 0.95 / size.x);
     model.scale.setScalar(s);
     var ctr = new THREE.Vector3(); box.getCenter(ctr);
     model.position.sub(ctr.multiplyScalar(s));
@@ -1454,7 +1454,7 @@
   (function loop(){ requestAnimationFrame(loop); renderer.render(scene, camera); })();
 
   var b64 = '';
-  new THREE.GLTFLoader().load('Meshy_AI_Nitro_Cold_Brew_in_a__0609103259_texture.glb',function(gltf){
+  new THREE.GLTFLoader().load('Straw.glb',function(gltf){
     var model = gltf.scene;
     var box = new THREE.Box3().setFromObject(model);
     var size = new THREE.Vector3(); box.getSize(size);
